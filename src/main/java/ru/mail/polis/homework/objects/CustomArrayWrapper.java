@@ -1,5 +1,6 @@
 package ru.mail.polis.homework.objects;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 /**
@@ -48,7 +49,21 @@ public class CustomArrayWrapper implements Iterable<Integer> {
      */
     @Override
     public Iterator<Integer> iterator() {
-        return null;
+
+        return new Iterator<>() {
+
+            private int currentIndex;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex < array.length;
+            }
+
+            @Override
+            public Integer next() {
+                return array[currentIndex++];
+            }
+        };
     }
 
     /**
@@ -58,7 +73,27 @@ public class CustomArrayWrapper implements Iterable<Integer> {
      * @return Iterator for EVEN elements
      */
     public Iterator<Integer> evenIterator() {
-        return null;
+        return new Iterator<>() {
+
+            private int currentEvenIndex = 0;
+            private final int finalPosition = position;
+
+            @Override
+            public boolean hasNext() {
+                return currentEvenIndex + 2 <= array.length;
+            }
+
+            @Override
+            public Integer next() {
+                if (currentEvenIndex % 2 == 0) {
+                    currentEvenIndex++;
+                }
+                if (position != finalPosition) {
+                    throw new ConcurrentModificationException();
+                }
+                return array[currentEvenIndex++];
+            }
+        };
     }
 
     /**
@@ -68,7 +103,30 @@ public class CustomArrayWrapper implements Iterable<Integer> {
      * @return Iterator for ODD elements
      */
     public Iterator<Integer> oddIterator() {
-        return null;
+        return new Iterator<>() {
+
+            private int currentIndex = 0;
+            private final int finalPosition = position;
+
+            @Override
+            public boolean hasNext() {
+                if (currentIndex == 0) {
+                    return currentIndex < array.length;
+                }
+                return currentIndex + 2 <= array.length;
+            }
+
+            @Override
+            public Integer next() {
+                if (position != finalPosition) {
+                    throw new ConcurrentModificationException();
+                }
+                if (currentIndex % 2 != 0) {
+                    currentIndex++;
+                }
+                return array[currentIndex++];
+            }
+        };
     }
 
     private void checkIndex(int index) {

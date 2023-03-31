@@ -28,6 +28,30 @@ public class CustomArrayWrapperTest {
     }
 
     @Test
+    public void testOddCase1() {
+        CustomArrayWrapper arrayWrapper = generateCustomArrayWrapper(new int[] {1});
+        Iterator<Integer> iterator = arrayWrapper.oddIterator();
+        List<Integer> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testEvenCase1() {
+        CustomArrayWrapper arrayWrapper = generateCustomArrayWrapper(new int[] {1, 2, 3});
+        Iterator<Integer> iterator = arrayWrapper.evenIterator();
+        List<Integer> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
     public void testDefaultIterator() {
         CustomArrayWrapper arrayWrapper = generateCustomArrayWrapper(DEFAULT_ARRAY);
         Iterator<Integer> iterator = arrayWrapper.iterator();
