@@ -1,9 +1,5 @@
 package ru.mail.polis.homework.oop.vet;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public class GeneratorAnimal {
     private GeneratorAnimal() {
@@ -26,16 +22,15 @@ public class GeneratorAnimal {
      * @return - соответствующего потомка
      */
     public static Animal generateAnimal(String animalType) {
-        switch (animalType) {
-            case "cat": return new Cat();
-            case "dog": return new Dog();
-            case "kangaroo": return new Kangaroo();
-            case "pigeon": return new Pigeon();
-            case "cow": return new Cow();
-            case "shark": return new Shark();
-            case "snake": return new Snake();
-            default:
-                throw new IllegalArgumentException("Unknown animal " + animalType);
-        }
+        return switch (animalType) {
+            case "cat" -> new Cat();
+            case "dog" -> new Dog();
+            case "kangaroo" -> new Kangaroo();
+            case "pigeon" -> new Pigeon();
+            case "cow" -> new Cow();
+            case "shark" -> new Shark();
+            case "snake" -> new Snake();
+            default -> throw new IllegalArgumentException("Unknown animal " + animalType);
+        };
     }
 }
