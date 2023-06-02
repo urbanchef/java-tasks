@@ -49,8 +49,7 @@ public class CustomArrayWrapper implements Iterable<Integer> {
      */
     @Override
     public Iterator<Integer> iterator() {
-
-        return new Iterator<>() {
+        Iterator<Integer> iterator = new Iterator<>() {
 
             private int currentIndex;
 
@@ -64,6 +63,8 @@ public class CustomArrayWrapper implements Iterable<Integer> {
                 return array[currentIndex++];
             }
         };
+
+        return iterator;
     }
 
     /**
