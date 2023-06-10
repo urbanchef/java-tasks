@@ -1,11 +1,6 @@
 package ru.mail.polis.homework.collections.structure;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Задание оценивается в 4 тугрика.
@@ -15,7 +10,12 @@ import java.util.Map;
  */
 public class CustomDictionary {
 
-    private Map<String, List<String>> stringsStorage = new HashMap<>();
+    private final Map<String, List<String>> stringsStorage = new HashMap<>();
+    private int size;
+
+    public CustomDictionary() {
+        this.size = 0;
+    }
 
     private String prepareString(String value) {
         return value.toLowerCase().trim().replaceAll("\\s+", "");
@@ -26,7 +26,7 @@ public class CustomDictionary {
         char[] charString = preparedString.toCharArray();
         Arrays.sort(charString);
 
-        return Arrays.toString(charString);
+        return String.valueOf(charString);
 
     }
 
@@ -40,13 +40,20 @@ public class CustomDictionary {
      */
     public boolean add(String value) {
         if (value == null || value.isEmpty() || value.isBlank()) {
-            return false;
+            throw new IllegalArgumentException();
         }
 
         String preparedKeyString = keyString(value);
         List<String> stringValue = stringsStorage.getOrDefault(preparedKeyString, new ArrayList<>());
 
-        return stringValue.add(value);
+        boolean result = false;
+        if (stringValue.contains(value)) {
+            return result;
+        }
+        result = stringValue.add(value);
+        stringsStorage.putIfAbsent(preparedKeyString, stringValue);
+        size++;
+        return result;
     }
 
     /**
@@ -58,7 +65,15 @@ public class CustomDictionary {
      * Сложность - [O(value.length())]
      */
     public boolean contains(String value) {
-        return stringsStorage.containsKey(keyString(value));
+        List<String> existingSimilarWords = stringsStorage.getOrDefault(keyString(value), new ArrayList<>());
+
+        for (String existingSimilarWord : existingSimilarWords) {
+            if (existingSimilarWord.equals(value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -70,7 +85,20 @@ public class CustomDictionary {
      * Сложность - []
      */
     public boolean remove(String value) {
-        return false;
+        boolean result = false;
+        List<String> existingSimilarWords = stringsStorage.getOrDefault(keyString(value), new ArrayList<>());
+
+        Iterator<String> iterator = existingSimilarWords.iterator();
+        while (iterator.hasNext()) {
+            String currentValue = iterator.next();
+            if (value.equals(currentValue)) {
+                iterator.remove();
+                size--;
+                result = true;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -93,7 +121,7 @@ public class CustomDictionary {
      * Сложность - []
      */
     public List<String> getSimilarWords(String value) {
-        return Collections.emptyList();
+        return stringsStorage.getOrDefault(keyString(value), Collections.emptyList());
     }
 
     /**
@@ -104,7 +132,7 @@ public class CustomDictionary {
      * Сложность - []
      */
     public int size() {
-        return 0;
+        return size;
     }
 
 
