@@ -46,11 +46,10 @@ public class CustomDictionary {
         String preparedKeyString = keyString(value);
         List<String> stringValue = stringsStorage.getOrDefault(preparedKeyString, new ArrayList<>());
 
-        boolean result = false;
         if (stringValue.contains(value)) {
-            return result;
+            return false;
         }
-        result = stringValue.add(value);
+        boolean result = stringValue.add(value);
         stringsStorage.putIfAbsent(preparedKeyString, stringValue);
         size++;
         return result;
